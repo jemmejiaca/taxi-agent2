@@ -72,7 +72,8 @@ public class JMainFrame extends JFrame implements ActionListener {
 					cols = Integer.parseInt(rawFirstLine[1]);
 					System.out.printf("%s, %s\n", rows, cols);
 					String[] strs = new String[rows];
-					ambientFrame = new JAmbientFrame(JAmbientPanel.SETTING_REQUESTS, rows, cols, this);
+					ambientFrame = new JAmbientFrame(JAmbientPanel.SETTING_TAXI_AGENT, rows, cols, this);
+					ambientFrame.buttonAccept.setEnabled(false);
 					int i = 0;
 					while (line != null && i < rows) {
 						line = br.readLine();
@@ -81,7 +82,7 @@ public class JMainFrame extends JFrame implements ActionListener {
 						i++;
 					}
 					ambientFrame.parseString(strs);
-					ambientFrame.setLog("Loaded file" + mapFile.getName());
+					ambientFrame.setLog("Loaded file: " + mapFile.getName());
 					br.close();
 				} catch (IOException e1) {
 					e1.printStackTrace();

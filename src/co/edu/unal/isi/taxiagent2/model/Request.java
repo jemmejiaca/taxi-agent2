@@ -38,5 +38,11 @@ public class Request {
 	public void setNumOfPassengers(int numOfPassengers) {
 		this.numOfPassengers = numOfPassengers;
 	}
+
+	@Override
+	public String toString() {
+		return "Request [startPosition=" + startPosition + ", endPosition=" + endPosition + ", numOfPassengers="
+				+ numOfPassengers + "]";
+	}
 	
 }

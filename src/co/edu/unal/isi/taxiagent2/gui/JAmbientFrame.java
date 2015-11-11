@@ -14,7 +14,9 @@ import javax.swing.JTextArea;
 
 public class JAmbientFrame extends JFrame implements ActionListener {
 	
+	static String logText = "";
 	JAmbientPanel ambientPanel;
+	JMainFrame mainFrame;
 	JTextArea log = new JTextArea(30, 35);
 	JScrollPane scrollPane = new JScrollPane(log);
 	JButton buttonAccept = new JButton("Accept");
@@ -24,6 +26,7 @@ public class JAmbientFrame extends JFrame implements ActionListener {
 	
 	public JAmbientFrame(int state, int rows, int cols, JMainFrame mainFrame) {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.mainFrame = mainFrame;
 		//contentPane.setLayout(layout);
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
@@ -33,16 +36,19 @@ public class JAmbientFrame extends JFrame implements ActionListener {
 		add(ambientPanel, BorderLayout.CENTER);
 		log.setEditable(false);
 		log.setFont(logFont);
-		add(log, BorderLayout.EAST);
+		add(scrollPane, BorderLayout.EAST);
+		buttonAccept.addActionListener(this);
 		add(buttonAccept, BorderLayout.SOUTH);
 		setSize(1000, 700);
+		setResizable(false);
 		//pack();
 		setLocationRelativeTo(null);
 		
 	}
 	
 	public void setLog(String msg) {
-		log.setText(" > " + msg + "\n");
+		logText += (" > " + msg + "\n");
+		log.setText(logText);
 	}
 	
 	public void parseString(String[] strs) {
@@ -56,7 +62,13 @@ public class JAmbientFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		Object source = e.getSource();
+		if(source == buttonAccept) {
+			if (ambientPanel.isAgentSetted()) {
+				buttonAccept.setText("Enough Requests!");
+				ambientPanel.setState(JAmbientPanel.SETTING_REQUESTS);
+			}
+		}
 		
 	}
 

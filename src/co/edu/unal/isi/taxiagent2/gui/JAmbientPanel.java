@@ -33,8 +33,10 @@ public class JAmbientPanel extends JPanel implements MouseListener {
 	private int rows, cols;
 	private int state, requestState;
 	private JCell[][] cellGrid;
-	private JAmbientFrame mainFrame;
+	private JAmbientFrame ambientFrame;
 	Request tmpRequest = new Request();
+	
+	boolean isAgentSetted;
 	
 	public JAmbientPanel(int state, int rows, int cols, JAmbientFrame ambientFrame) {
 		this.rows = rows;
@@ -42,8 +44,9 @@ public class JAmbientPanel extends JPanel implements MouseListener {
 		this.state = state;
 		this.requestState = BLOCKED;
 		this.cellGrid = new JCell[rows][cols];
+		this.isAgentSetted = false;
 		//this.situation = new Situation();
-		this.mainFrame = ambientFrame;
+		this.ambientFrame = ambientFrame;
 		setLayout(new GridLayout(rows, cols, GAP, GAP));
 		setBackground(Color.BLACK);
 		setBorder(BorderFactory.createLineBorder(Color.black));
@@ -82,7 +85,7 @@ public class JAmbientPanel extends JPanel implements MouseListener {
 			}
 		} else if (state == SETTING_TAXI_AGENT) {
 			Object source = e.getSource();
-			//TaxiAgent taxiAgent = new TaxiAgent();
+			TaxiAgent taxiAgent = new TaxiAgent();
 			Position selectedCellPosition;
 			if (source instanceof JCell) {
 				JCell selectedCell = (JCell) source;
@@ -91,16 +94,19 @@ public class JAmbientPanel extends JPanel implements MouseListener {
 				int i = selectedCellPosition.getI();
 				int j = selectedCellPosition.getJ();
 				cellGrid[i][j].setBackground(TAXI_AGENT_COLOR); //pintar la casilla del taxi
-				//taxiAgent.setPosition(selectedCellPosition);
+				taxiAgent.setPosition(selectedCellPosition);
 				//situation.setTaxiAgent(taxiAgent);
-				setState(BLOCKED);
+				setState(SETTING_REQUESTS);
+				isAgentSetted = true;
 				//graph.getAgent().setPosition(selectedCellPosition); //mi taxi en el grafo
 				//graph.print();
 				//System.out.println(taxiAgent);
+				ambientFrame.setLog(taxiAgent.toString());
 			}
 		} 
 		else if (state == SETTING_REQUESTS) 
 		{
+			ambientFrame.buttonAccept.setEnabled(true);
 			int numOfPassengers;
 			
 			Position startPosition, endPosition;
@@ -137,6 +143,7 @@ public class JAmbientPanel extends JPanel implements MouseListener {
 						//graph.getPeticiones().add(tmpRequest);
 						
 						System.out.println(tmpRequest);
+						ambientFrame.setLog(tmpRequest.toString());
 						requestState = BLOCKED;
 						
 						//darle nueva memoria
@@ -154,6 +161,15 @@ public class JAmbientPanel extends JPanel implements MouseListener {
 	public void setState(int state) {
 		this.state = state;
 	}
+	
+	public int getState() {
+		return state;
+	}
+	
+	public boolean isAgentSetted() {
+		return isAgentSetted;
+	}
+
 	
 	// ********** Non-used methods ***********
 	

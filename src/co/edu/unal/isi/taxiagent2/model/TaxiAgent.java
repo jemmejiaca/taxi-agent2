@@ -8,6 +8,10 @@ public class TaxiAgent {
 		this.position = position;
 		maxQuota = quota;
 	}
+	
+	public TaxiAgent() {
+		
+	}
 
 	public int getMaxQuota() {
 		return maxQuota;
@@ -24,5 +28,12 @@ public class TaxiAgent {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
+
+	@Override
+	public String toString() {
+		return "TaxiAgent [maxQuota=" + maxQuota + ", position=" + position + "]";
+	}
+	
+	
 	
 }
