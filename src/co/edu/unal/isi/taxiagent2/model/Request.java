@@ -10,6 +10,10 @@ public class Request {
 		this.endPosition = endPosition;
 		this.numOfPassengers = numOfPassengers;
 	}
+	
+	public Request () {
+		
+	}
 
 	public Position getStartPosition() {
 		return startPosition;

@@ -29,7 +29,7 @@ public class JAmbientFrame extends JFrame implements ActionListener {
 		layout.setAutoCreateContainerGaps(true);
 		
 		//setLayout(new FlowLayout());
-		ambientPanel = new JAmbientPanel(state, rows, cols, mainFrame);
+		ambientPanel = new JAmbientPanel(state, rows, cols, this);
 		add(ambientPanel, BorderLayout.CENTER);
 		log.setEditable(false);
 		log.setFont(logFont);
