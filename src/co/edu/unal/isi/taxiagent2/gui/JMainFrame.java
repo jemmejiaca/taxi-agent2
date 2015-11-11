@@ -1,17 +1,16 @@
 package co.edu.unal.isi.taxiagent2.gui;
 
 import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-
-import com.sun.xml.internal.ws.api.Component;
 
 /**
  * The main frame: this is the entry point of the program.
@@ -56,16 +55,40 @@ public class JMainFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		JAmbientFrame ambientFrame = null;
+		int rows = -1, cols = -1;
 		if (source == buttonOK) {
 			if (environmentCreationPanel.radioButtonManually.isSelected()) {
-				int rows = environmentCreationPanel.getRows();
-				int cols = environmentCreationPanel.getCols();
+				rows = environmentCreationPanel.getRows();
+				cols = environmentCreationPanel.getCols();
 				ambientFrame = new JAmbientFrame(JAmbientPanel.SETTING_ROAD, rows, cols, this);
-				ambientFrame.setLog("Ambient created of size " + rows + "x" + cols);
+				
 			} else if (environmentCreationPanel.radioButtonLoadFile.isSelected()) {
 				File mapFile = environmentCreationPanel.getMapFile();
-				// TODO read map file
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(mapFile));
+					String line = br.readLine();
+					String[] rawFirstLine = line.split(" ");
+					rows = Integer.parseInt(rawFirstLine[0]);
+					cols = Integer.parseInt(rawFirstLine[1]);
+					System.out.printf("%s, %s\n", rows, cols);
+					String[] strs = new String[rows];
+					ambientFrame = new JAmbientFrame(JAmbientPanel.SETTING_REQUESTS, rows, cols, this);
+					int i = 0;
+					while (line != null && i < rows) {
+						line = br.readLine();
+						strs[i] = line;
+						System.out.println(strs[i]);
+						i++;
+					}
+					ambientFrame.parseString(strs);
+					ambientFrame.setLog("Loaded file" + mapFile.getName());
+					br.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
 			}
+			ambientFrame.setLog("Size of the ambient " + rows + "x" + cols);
 			this.setVisible(false);
 			ambientFrame.setVisible(true);
 		}

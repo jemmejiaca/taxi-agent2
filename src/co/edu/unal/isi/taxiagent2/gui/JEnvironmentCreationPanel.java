@@ -76,8 +76,10 @@ public class JEnvironmentCreationPanel extends JPanel implements ItemListener, A
 		Object source = e.getSource();
 		if (source == searchFilePanel.btSearch) {
 			int returnValue = fileChooser.showOpenDialog(this);
-			if (returnValue == JFileChooser.APPROVE_OPTION)
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				mapFile = fileChooser.getSelectedFile();
+				searchFilePanel.tfFile.setText(mapFile.getPath());
+			}
 		}
 	}
 

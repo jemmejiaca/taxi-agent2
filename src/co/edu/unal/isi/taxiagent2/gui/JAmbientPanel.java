@@ -61,6 +61,10 @@ public class JAmbientPanel extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		
 	}
+	
+	public JCell[][] getGrid() {
+		return cellGrid;
+	}
 
 	
 	

@@ -44,6 +44,15 @@ public class JAmbientFrame extends JFrame implements ActionListener {
 	public void setLog(String msg) {
 		log.setText(" > " + msg + "\n");
 	}
+	
+	public void parseString(String[] strs) {
+		for (int i = 0; i < strs.length; i++) {
+			for (int j = 0; j < strs[i].length(); j++) {
+				if (strs[i].charAt(j) == '-')
+					ambientPanel.getGrid()[i][j].setBackground(JAmbientPanel.ROAD_COLOR);
+			}
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
