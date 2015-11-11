@@ -48,6 +48,7 @@ public class JEnvironmentCreationPanel extends JPanel implements ItemListener, A
 		searchFilePanel.btSearch.addActionListener(this);
 		add(searchFilePanel);
 		add(taxiMaximumQuotaPanel);
+		radioButtonManually.setSelected(true);
 	}
 
 	@Override

@@ -55,14 +55,19 @@ public class JMainFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
+		JAmbientFrame ambientFrame = null;
 		if (source == buttonOK) {
 			if (environmentCreationPanel.radioButtonManually.isSelected()) {
 				int rows = environmentCreationPanel.getRows();
 				int cols = environmentCreationPanel.getCols();
+				ambientFrame = new JAmbientFrame(JAmbientPanel.SETTING_ROAD, rows, cols, this);
+				ambientFrame.setLog("Ambient created of size " + rows + "x" + cols);
 			} else if (environmentCreationPanel.radioButtonLoadFile.isSelected()) {
 				File mapFile = environmentCreationPanel.getMapFile();
+				// TODO read map file
 			}
 			this.setVisible(false);
+			ambientFrame.setVisible(true);
 		}
 	}
 
