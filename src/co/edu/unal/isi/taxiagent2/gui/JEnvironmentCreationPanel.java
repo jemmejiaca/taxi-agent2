@@ -1,21 +1,23 @@
 package co.edu.unal.isi.taxiagent2.gui;
 
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
-public class JEnvironmentCreationPanel extends JPanel implements ItemListener {
+public class JEnvironmentCreationPanel extends JPanel implements ItemListener, ActionListener {
 	
 	/**
 	 * 
@@ -23,52 +25,76 @@ public class JEnvironmentCreationPanel extends JPanel implements ItemListener {
 	private static final long serialVersionUID = 1730252931506111774L;
 	
 	static final String BORDER_TITLE = "Environment Creation";
-	JRadioButton rbManually = new JRadioButton("Manually");
-	JRadioButton rbLoadFile = new JRadioButton("Load file (*.tae)");
+	JRadioButton radioButtonManually = new JRadioButton("Manually");
+	JRadioButton radioButtonLoadFile = new JRadioButton("Load file (*.tae)");
 	JAmbientSizePanel ambientSizePanel = new JAmbientSizePanel();
 	JSearchFilePanel searchFilePanel = new JSearchFilePanel();
+	JFileChooser fileChooser = new JFileChooser();
+	JTaxiMaximumQuotaPanel taxiMaximumQuotaPanel = new JTaxiMaximumQuotaPanel();
 	ButtonGroup group = new ButtonGroup();
+	private int nRows, nCols;
+	private File mapFile;
 	
 	public JEnvironmentCreationPanel() {
-		setLayout(new GridLayout(4, 1, 0, 0));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(BorderFactory.createTitledBorder(BORDER_TITLE));
-		add(rbManually);
-		group.add(rbManually);
+		radioButtonManually.addItemListener(this);
+		add(radioButtonManually);
+		group.add(radioButtonManually);
 		add(ambientSizePanel);
-		add(rbLoadFile);
-		group.add(rbLoadFile);
+		radioButtonLoadFile.addItemListener(this);
+		add(radioButtonLoadFile);
+		group.add(radioButtonLoadFile);
+		searchFilePanel.btSearch.addActionListener(this);
 		add(searchFilePanel);
-		
+		add(taxiMaximumQuotaPanel);
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object source = e.getItem();
-		
-		if(group.isSelected((ButtonModel) rbManually)) searchFilePanel.tfFile.setEditable(false);
-		else if (group.isSelected((ButtonModel) rbLoadFile)) ambientSizePanel.rowsField.setEditable(false);
-			
-		if (source == rbManually) {
-			int select = e.getStateChange();
-			if(select == ItemEvent.SELECTED) {
+		int select = e.getStateChange();
+		if (source == radioButtonManually) {
+			if (select == ItemEvent.SELECTED) {
+				ambientSizePanel.colsField.setEditable(true);
 				ambientSizePanel.rowsField.setEditable(true);
-				ambientSizePanel.colsField.setEnabled(true);
 				searchFilePanel.btSearch.setEnabled(false);
 				searchFilePanel.tfFile.setEditable(false);
 			}
-		}
-		else if(source == rbLoadFile) {
-			int select = e.getStateChange();
-			if(select == ItemEvent.SELECTED) {
-				ambientSizePanel.rowsField.setEnabled(false);
-				ambientSizePanel.colsField.setEnabled(false);
+			else {
+				ambientSizePanel.colsField.setEditable(false);
+				ambientSizePanel.rowsField.setEditable(false);
 				searchFilePanel.btSearch.setEnabled(true);
 				searchFilePanel.tfFile.setEditable(true);
 			}
 		}
 	}
-	
-	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
+		if (source == searchFilePanel.btSearch) {
+			int returnValue = fileChooser.showOpenDialog(this);
+			if (returnValue == JFileChooser.APPROVE_OPTION)
+				mapFile = fileChooser.getSelectedFile();
+		}
+	}
+
+	public int getRows() {
+		return Integer.parseInt(ambientSizePanel.rowsField.getText());
+	}
+
+	public int getCols() {
+		return Integer.parseInt(ambientSizePanel.colsField.getText());
+	}
+
+	public File getMapFile() {
+		return mapFile;
+	}
+
+	public void setMapFile(File mapFile) {
+		this.mapFile = mapFile;
+	}
 	
 }
 
@@ -91,7 +117,7 @@ class JAmbientSizePanel extends JPanel {
 class JSearchFilePanel extends JPanel {
 	
 	JTextField tfFile = new JTextField(10);
-	JButton btSearch = new JButton("Search");
+	public JButton btSearch = new JButton("Search");
 	
 	public JSearchFilePanel() {
 		setLayout(new FlowLayout());
@@ -100,4 +126,16 @@ class JSearchFilePanel extends JPanel {
 		
 	}
 
+}
+
+class JTaxiMaximumQuotaPanel extends JPanel {
+	JLabel labelTaxiQuota = new JLabel("Taxi Quota:");
+	JTextField fieldTaxiQuota = new JTextField(2);
+	
+	public JTaxiMaximumQuotaPanel() {
+		setLayout(new FlowLayout());
+		add(labelTaxiQuota);
+		add(fieldTaxiQuota);
+	}
+	
 }

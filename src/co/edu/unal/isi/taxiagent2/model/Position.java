@@ -26,6 +26,15 @@ public class Position {
 	public void setJ(int j) {
 		this.j = j;
 	}
+	
+	public double euclideanDistanceTo(Position p) {
+		int a = i, b = j, c = p.getI(), d = p.getJ();
+		return Math.sqrt( Math.pow(a - c, 2) + Math.pow(b - d, 2) );
+	}
+	
+	public int manhattanDistanceTo(Position p) {
+		return Math.abs(i - p.getI()) + Math.abs(j - p.getJ());
+	}
 
 	@Override
 	public String toString() {
@@ -56,6 +65,5 @@ public class Position {
 			return false;
 		return true;
 	}
-	
 	
 }
